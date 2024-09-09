@@ -33,3 +33,11 @@ ckpts*
 
 # Demo
 serve_images/
+
+datasets/
+SCAT_results/
+*.err
+*.out
+trash_results/
+GPT_result/
+.env
