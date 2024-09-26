@@ -41,3 +41,5 @@ SCAT_results/
 trash_results/
 GPT_result/
 .env
+center-frame_LLava_result/
+concept_set/

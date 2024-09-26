@@ -7,7 +7,7 @@ import openai.error
 from dotenv import load_dotenv
 
 def get_answer(args):
-    load_dotenv()
+    load_dotenv(verbose=True)
     openai.api_key = os.getenv('API_KEY')
 
     #################
@@ -20,7 +20,7 @@ def get_answer(args):
             labels.append(line.strip())
     
     answer_file = os.path.join(args.answers_file, f'{dataset_name}_ost_{args.descriptor_type}_concepts.txt')
-##############
+    ##############
     for i, label in enumerate(labels):
         if args.descriptor_type == 'spatio':
             # qs = f'Please give me a long list of descriptors for action scene: {label}, 4 descriptors in total.'
