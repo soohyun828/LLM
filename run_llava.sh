@@ -2,11 +2,11 @@
 
 #SBATCH --job-name llava
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-gpu=12
-#SBATCH --mem-per-gpu=60G
+#SBATCH --cpus-per-gpu=10
+#SBATCH --mem-per-gpu=50G
 #SBATCH --time 4-00:00:0
 #SBATCH --partition batch_ce_ugrad
-#SBATCH -w moana-y6
+#SBATCH -w moana-y3
 #SBATCH -o /data/psh68380/repos/LLaVA/%A-%x.out
 #SBATCH -e /data/psh68380/repos/LLaVA/%A-%x.err
 echo $PWD
@@ -29,9 +29,10 @@ export PYTHONPATH="${workspaceFolder}:${workspaceFolder}/llava/eval"
 # this script is for 2 GPUs (1 nodes x 2 GPUs)
 # --data_root "/local_datasets/ai_hub_sketch_mw/01/train"
 python -u /data/psh68380/repos/LLaVA/llava/eval/run_llava_for_videocbm.py \
+--dataset "ssv2" \
 --model_path "liuhaotian/llava-v1.5-7b" \
---image_path "/data/datasets/kinetics100_center_frame/train/frame_num_3" \
---answer_folder "center-frame_LLava_result/k100_spatio_3frame" \
+--image_path "/data/datasets/ssv2_center_frame/train/center" \
+--answer_folder "center-frame_LLava_result/ssv2_spatio_center_frame" \
 --descriptor_type "spatio" \
 --temperature 0 \
 --num_beams 1 \

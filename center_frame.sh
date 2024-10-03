@@ -6,7 +6,7 @@
 #SBATCH --mem-per-gpu=50G
 #SBATCH --time 4-00:00:0
 #SBATCH --partition batch_ce_ugrad
-#SBATCH -w moana-y6
+#SBATCH -w moana-y3
 #SBATCH -o /data/psh68380/repos/LLaVA/%A-%x.out
 #SBATCH -e /data/psh68380/repos/LLaVA/%A-%x.err
 echo $PWD
@@ -17,8 +17,9 @@ echo $current_time
 export MASTER_PORT=12345
 
 python -u /data/psh68380/repos/LLaVA/center_frame.py \
+--dataset "ssv2" \
 --frame_num 3 \
---frame_save_folder "/data/datasets/kinetics100_center_frame/train/frame_num_3"
+--frame_save_folder "/data/datasets/ssv2_center_frame/train/frame_num_3"
     
 echo "Job finish"
 exit 0

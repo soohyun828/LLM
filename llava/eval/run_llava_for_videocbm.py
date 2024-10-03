@@ -60,18 +60,20 @@ def eval_model(args):
         args.model_path, args.model_base, model_name
     )
 
-    ###
-    file_name = os.path.basename(args.label_file)
-    dataset_name = file_name.replace('_classes.txt', '')
-
-    labels = []
-    with open(args.label_file, 'r') as lines:
-        for line in lines:
-            labels.append(line.strip())
-
-    #### for kinetics ####
-    anno_file = '/data/psh68380/repos/Video-CBM_/data/video_annotation/kinetics100/train.csv'
-    labels_file = '/data/psh68380/repos/Video-CBM_/data/kinetics100_classes.csv'
+    if args.dataset == "k100":
+        anno_file = '/data/psh68380/repos/Video-CBM_/data/video_annotation/kinetics100/train.csv'
+        labels_file = '/data/psh68380/repos/Video-CBM_/data/kinetics100_classes.csv'
+    elif args.dataset == "k400":
+        anno_file = '/data/psh68380/repos/Video-CBM_/data/video_annotation/kinetics400/train.csv'
+        labels_file = '/data/psh68380/repos/Video-CBM_/data/kinetics400_classes.csv'
+    elif args.dataset == "ssv2":
+        anno_file = '/data/psh68380/repos/Video-CBM_/data/video_annotation/SSV2/train.csv'
+        labels_file = '/data/psh68380/repos/Video-CBM_/data/ssv2_classes.csv'
+    else: 
+        print("It is wrong dataset.")
+    
+    file_name = os.path.basename(labels_file)
+    dataset_name = file_name.replace('_classes.csv', '')
 
     df_videos = pd.read_csv(anno_file, header=None, names=['video_path', 'label'])
     df_labels = pd.read_csv(labels_file)
@@ -97,7 +99,7 @@ def eval_model(args):
                 if args.descriptor_type == 'spatio':
                     # qs = f'Here is an image of someone performing {label}; Can you give me a list of spatial descriptors for this image?, {args.N_s} descriptors in total.' # tem = 0.2
                     # qs = f'Please give me four object in the form of a single word or short phrases.' # k400_spatio_descriptors/
-                    qs = f'Please give me four objects in this image, as single words.' # k100_temporal_descriptors/
+                    qs = f'Please give me four objects in this image, as single words.' # k100_temporal_descriptors/ # k400_spatio_center_frame
                 elif args.descriptor_type == 'temporal':
                     qs = f'This image represents the action {label}. Please divide the action into 2 distinct action in the form of a single word or short phrases.'
 
@@ -188,6 +190,7 @@ def eval_model(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset", choices=['k100', 'k400', 'ssv2'], type=str, default="k100")
     parser.add_argument("--model_path", type=str, default="facebook/opt-350m")
     parser.add_argument("--model_base", type=str, default=None)
     parser.add_argument("--image_path", type=str, required=True)
@@ -199,10 +202,10 @@ if __name__ == "__main__":
     parser.add_argument("--top_p", type=float, default=None)
     parser.add_argument("--num_beams", type=int, default=1)
     parser.add_argument("--max_new_tokens", type=int, default=512)
-    parser.add_argument("--label_file", type=str, default="/data/psh68380/repos/Video-CBM_/data/kinetics400_classes.txt")
     parser.add_argument("--answer_folder", type=str, default="/data/psh68380/repos/LLaVA/center-frame_LLava_result")
     parser.add_argument("--N_s", type=int, default=2)
     parser.add_argument("--descriptor_type", choices=['spatio', 'temporal'], type=str, default="spatio")
+    
     args = parser.parse_args()
 
     eval_model(args)
